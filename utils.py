@@ -5,10 +5,21 @@ from typing import List
 
 import numpy as np
 import torch
-from torch.utils.data.dataloader import _use_shared_memory
-from torch.utils.data.dataloader import int_classes
-from torch.utils.data.dataloader import numpy_type_map
 from torch.utils.data.dataloader import string_classes
+
+numpy_type_map = {
+     'float64': torch.DoubleTensor,
+     'float32': torch.FloatTensor,
+     'float16': torch.HalfTensor,
+     'int64': torch.LongTensor,
+     'int32': torch.IntTensor,
+     'int16': torch.ShortTensor,
+     'int8': torch.CharTensor,
+     'uint8': torch.ByteTensor,
+ }
+
+
+_use_shared_memory = True
 
 
 def set_random_seed(seed):
@@ -84,8 +95,7 @@ def concat_collate(batch):
         if elem.shape == ():  # scalars
             py_type = float if elem.dtype.name.startswith('float') else int
             return numpy_type_map[elem.dtype.name](list(map(py_type, batch)))
-    elif isinstance(batch[0], int_classes):
-        return torch.LongTensor(batch)
+
     elif isinstance(batch[0], float):
         return torch.DoubleTensor(batch)
     elif isinstance(batch[0], string_classes):

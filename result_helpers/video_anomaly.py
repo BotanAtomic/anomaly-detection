@@ -137,6 +137,7 @@ class VideoAnomalyDetectionResultHelper(object):
             sample_llk = np.zeros(shape=(len(loader) + t - 1,))
             sample_rec = np.zeros(shape=(len(loader) + t - 1,))
             sample_y = self.dataset.load_test_sequence_gt(video_id)
+
             for i, (x, y) in tqdm(enumerate(loader), desc=f'Computing scores for {self.dataset}'):
                 x = x.to('cuda')
 
